@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>スマホで学ぶ GitHub Pages & Copilot 入門スライド</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: #121a33;
+        --text: #f3f6ff;
+        --sub: #b7c3e6;
+        --accent: #7bc6ff;
+        --accent-2: #8dffb3;
+        --warn: #ffd37b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(160deg, #060912, #111a33 60%, #1d2a4d);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", sans-serif;
+      }
+
+      .deck {
+        max-width: 920px;
+        margin: 0 auto;
+        min-height: 100dvh;
+        padding: 16px 16px 96px;
+      }
+
+      .slide {
+        display: none;
+        background: color-mix(in srgb, var(--card) 88%, #000 12%);
+        border: 1px solid #26345f;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 14px 32px rgb(0 0 0 / 36%);
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin-top: 0;
+        line-height: 1.35;
+      }
+
+      h1 {
+        font-size: clamp(1.45rem, 4vw, 2.2rem);
+      }
+
+      h2 {
+        font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+      }
+
+      p,
+      li {
+        line-height: 1.8;
+        font-size: clamp(1rem, 2.8vw, 1.1rem);
+      }
+
+      ul,
+      ol {
+        margin: 10px 0 0;
+        padding-left: 1.2em;
+      }
+
+      .lead {
+        color: var(--sub);
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        border: 1px solid #36509d;
+        color: var(--accent);
+        font-size: 0.88rem;
+        margin-right: 8px;
+      }
+
+      .box {
+        background: #0b132a;
+        border: 1px solid #32457e;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-top: 12px;
+      }
+
+      .good {
+        border-color: #2f7f52;
+        background: #0b1d18;
+      }
+
+      .warn {
+        border-color: #9d7a35;
+        background: #231b0b;
+      }
+
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: #050914;
+        border: 1px solid #2b3d72;
+        border-radius: 10px;
+        padding: 8px 10px;
+        display: inline-block;
+      }
+
+      .controls {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        background: rgb(6 9 18 / 88%);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid #2c3e73;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      button {
+        border: 1px solid #3a57a8;
+        background: #102050;
+        color: var(--text);
+        border-radius: 999px;
+        padding: 11px 16px;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      .progress {
+        text-align: center;
+        color: var(--sub);
+        margin: 10px 0 14px;
+        font-size: 0.95rem;
+      }
+
+      a {
+        color: #9fd4ff;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="deck">
+      <div class="progress" id="progress">1 / 8</div>
+
+      <section class="slide active">
+        <h1>スマホだけでできる！<br />GitHub Pages × Copilot 入門</h1>
+        <p class="lead">
+          このスライドは「最初の公開確認」と「Copilotでテトリス作成」の2ステップを、
+          小学生でも進められるように作っています。
+        </p>
+        <p>
+          <span class="tag">目標1</span> <span class="mono">index.html</span>
+          に Hello World を表示して公開確認する
+        </p>
+        <p>
+          <span class="tag">目標2</span> <span class="mono">index.html</span>
+          だけで Copilot にテトリスを作ってもらう
+        </p>
+      </section>
+
+      <section class="slide">
+        <h2>準備するもの（スマホ）</h2>
+        <ul>
+          <li>GitHubアカウント（無料）</li>
+          <li>スマホのブラウザ（Chrome / Safari）</li>
+          <li>インターネット</li>
+        </ul>
+        <div class="box warn">
+          <strong>大事：</strong>
+          GitHubアプリよりも、ブラウザで <span class="mono">github.com</span> を開く方が作業しやすいです。
+        </div>
+        <div class="box">
+          画面右上の「⋯」メニューで<br />
+          <strong>「PC版サイトを表示」</strong>をONにすると編集が楽です。
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>手順1：Hello Worldで公開確認</h2>
+        <ol>
+          <li>GitHubで新しいリポジトリを作る（例：<span class="mono">mypages</span>）</li>
+          <li><span class="mono">Add file → Create new file</span> を押す</li>
+          <li>ファイル名を <span class="mono">index.html</span> にする</li>
+          <li>中身に次の1行だけ書く：<span class="mono">Hello World</span></li>
+          <li><span class="mono">Commit changes</span> を押す</li>
+        </ol>
+      </section>
+
+      <section class="slide">
+        <h2>手順1：GitHub PagesをONにする</h2>
+        <ol>
+          <li><span class="mono">Settings</span> タブを開く</li>
+          <li><span class="mono">Pages</span> を開く</li>
+          <li>
+            <span class="mono">Build and deployment</span> の
+            <span class="mono">Source</span> を
+            <span class="mono">Deploy from a branch</span> にする
+          </li>
+          <li>Branch を <span class="mono">main</span> / <span class="mono">/(root)</span> で保存</li>
+          <li>表示されたURLを開いて Hello World が出たら成功！</li>
+        </ol>
+        <div class="box good">
+          まずはこの確認が最重要。ここが通れば、次のテトリス作成も必ず進められます。
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>手順2：なぜCopilotを使うの？</h2>
+        <p>
+          理由はシンプルです。<strong>1つずつ難しいコードを覚えなくても、作りながら学べる</strong>からです。
+        </p>
+        <ul>
+          <li>「こういうゲームを作りたい」を文章で伝えられる</li>
+          <li>修正も「ここを直して」と会話で進められる</li>
+          <li>小学生でも「作れた！」体験に早くたどり着ける</li>
+        </ul>
+        <div class="box warn">
+          Copilotのコードはそのまま貼るだけでなく、必ず動作確認して1行ずつ理解していきましょう。
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>手順2：index.html だけでテトリス作成</h2>
+        <ol>
+          <li>同じ <span class="mono">index.html</span> を開いて編集</li>
+          <li>
+            Copilot Chat に次のお願いを送る：
+            <div class="box">
+              「index.html 1ファイルだけで動くテトリスを作って。<br />
+              HTML/CSS/JavaScriptを1つのファイルにまとめて、
+              スマホのタッチ操作（左右移動・回転・高速落下）ボタンも付けて。」
+            </div>
+          </li>
+          <li>提案コードを <span class="mono">index.html</span> に貼る</li>
+          <li><span class="mono">Commit changes</span> を押す</li>
+        </ol>
+      </section>
+
+      <section class="slide">
+        <h2>テトリスをスマホ向けに完成させるコツ</h2>
+        <ul>
+          <li>文字が小さすぎたら「フォントを大きくして」とCopilotに依頼</li>
+          <li>操作しづらければ「ボタンを画面下に大きく配置して」と依頼</li>
+          <li>ゲームオーバー後に「再スタートボタンを追加して」と依頼</li>
+          <li>色を変えたければ「ブロック色をカラフルに」と依頼</li>
+        </ul>
+        <div class="box good">
+          うまくいかないときは「エラーの原因を説明して、修正版を全部表示して」と送るのがコツ。
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>最終チェックリスト</h2>
+        <ol>
+          <li>Hello World の公開URLにアクセスできる</li>
+          <li>index.html をテトリス版に更新して再公開できる</li>
+          <li>スマホでテトリスが操作できる</li>
+          <li>「なぜこのコードか」を1つ説明できる</li>
+        </ol>
+        <p class="lead">
+          ここまでできたら、あなたはもう「AIと一緒にアプリを作れる人」です！
+        </p>
+      </section>
+    </main>
+
+    <nav class="controls">
+      <button id="prev" type="button">← 前へ</button>
+      <button id="next" type="button">次へ →</button>
+    </nav>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      let index = 0;
+
+      function render() {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+        });
+        progress.textContent = `${index + 1} / ${slides.length}`;
+        prev.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+      }
+
+      prev.addEventListener('click', () => {
+        index = Math.max(0, index - 1);
+        render();
+      });
+
+      next.addEventListener('click', () => {
+        index = Math.min(slides.length - 1, index + 1);
+        render();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') prev.click();
+        if (event.key === 'ArrowRight') next.click();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
